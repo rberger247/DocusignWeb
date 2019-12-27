@@ -1,0 +1,108 @@
+﻿<script>
+  $( function() {
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1970:2020",
+      showOn: "both",
+      buttonImage: "images/calendar.gif",
+      buttonImageOnly: true
+    });
+  } );
+</script>
+
+<div ng-controller="TollingController">
+
+    <div style="clear:both;">
+        <div style="float:left">
+            <h3>Tolling (<span ng-bind="ClientInfo.WLNumber"></span> - <span ng-bind="ClientInfo.ClientName"></span>- <span ng-bind="ClientInfo.Litigation"></span>)</h3>
+        </div>
+    </div>
+
+    <div style="clear: both; padding-top: 10px;" ng-show="ViewMode">
+        <div style="clear: both;">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Toll Start</th>
+                        <th>Toll End</th>
+                        <th>Product</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="x in TollEntries">
+                        <td>{{x.TollStartDate}}</td>
+                        <td>{{x.TollEndDate}}</td>
+                        <td>{{x.Product}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-xs" ng-click="EditToll($index)">Edit Toll</button>
+                            <button class="btn btn-primary btn-xs" ng-click="DeleteToll(x.TollId)">Delete Toll</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="clear: both;">
+            <button class="btn btn-primary btn-xs" ng-click="AddToll()">Add Toll</button>
+        </div>
+    </div>
+
+    <div style="clear: both; padding-top: 10px;" ng-show="EditMode">
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                Product
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <select ng-model="CurrentToll.Product" ng-class="form-control" ng-show="NewToll">
+                        <option ng-repeat="x in SubLitigations" value="{{x.Value}}">{{x.Text}}</option>
+                    </select>
+                    <span ng-bind="CurrentToll.Product" ng-show="!NewToll"></span>
+                </div>
+            </div>
+        </div>
+
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                Toll Start
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input name="TollStartDate" type="text" maxlength="10" class="datepicker" ng-model="CurrentToll.TollStartDate" style="width: 200px;">
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                Toll End
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input name="TollEndDate" type="text" maxlength="10" class="datepicker" ng-model="CurrentToll.TollEndDate" style="width: 200px;">
+                </div>
+            </div>
+        </div>
+
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left;">
+                <button class="btn btn-primary btn-xs" ng-click="SaveToll()">Save Toll</button>
+            </div>
+            <div style="float: left; width: 140px; padding-left:20px;">
+                <button class="btn btn-primary btn-xs" ng-click="CancelSave()">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="clear: both; padding-top: 10px; color:red;" ng-show="TollError">
+        <span ng-bind="TollError"></span>
+    </div>
+
+</div>
+

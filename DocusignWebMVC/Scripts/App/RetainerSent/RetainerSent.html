@@ -1,0 +1,62 @@
+﻿<script>
+  $( function() {
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "2000:2018",
+      showOn: "both",
+      buttonImage: "images/calendar.gif",
+      buttonImageOnly: true
+    });
+  } );
+</script>
+
+<div ng-controller="RetainerSentController">
+    <div style="margin-left: 30px; clear: both; padding-top: 20px;" ng-show="EditMode">
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                Retainer Sent Date
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input name="RetainerSentDate" class="datepicker" type="text" maxlength="30" ng-model="RetainerSentDate" required style="width: 200px;">
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; margin-left: 140px; color: red" ng-show="RetainerSentDateError">Please enter date</div>
+
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                WL Numbers
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <textarea name="WLNumbers" id="WLNumbers" type="text" rows="5" cols="50" ng-model="WLNumbers" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px; margin-left: 140px;">
+            Each WL number should be on a separate line
+        </div>
+
+        <div style="clear: both; margin-left: 140px; color: red" ng-show="WLNumbersError">Please enter WL Numbers (each number should be on a separate line)</div>
+
+        <div style="clear: both; padding-top: 10px;">
+            <button id="btnUploadEntries" class="btn btn-default" ng-click="UploadEntries()" ng-disabled="UploadEntriesDisabled">
+                Update Retainer Sent
+            </button>
+        </div>
+
+        <div style="clear: both; margin-left: 140px; color: red" ng-bind="UploadError"></div>
+
+    </div>
+
+    <div style="margin-left: 30px; clear: both; padding-top: 20px;" ng-show="ViewMode">
+        <div ng-bind="UploadMessage"></div>
+    </div>
+</div>
+

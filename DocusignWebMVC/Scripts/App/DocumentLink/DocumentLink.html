@@ -1,0 +1,227 @@
+﻿<div ng-controller="DocumentLinkController">
+    <div style="margin-left: 30px; clear: both; padding-top: 20px;" ng-show="EditMode">
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                Linking Mode
+            </div>
+            <div style="float: left;">
+                <input type="radio" ng-model="DocLinkMode" value="Basic" ng-change="ChangeDocLinkMode()">Basic
+                <input type="radio" ng-model="DocLinkMode" value="Advanced" ng-change="ChangeDocLinkMode()">Advanced
+            </div>
+        </div>
+
+            <div style="clear: both; padding-top: 10px;">
+                <div style="float: left; width: 140px;">
+                    Document Path
+                </div>
+                <div style="float: left;">
+                    <span ng-bind="DocumentMainPath" style="margin-right:5px;"></span><input name="DocumentFolder" ng-model="DocumentFolder" required style="width: 100px;">
+                </div>
+            </div>
+
+            <!--<div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 120px;">
+                Document Files
+            </div>
+            <div style="float: left;">
+                <div style="float:left;">
+                    <input type="file" multiple onchange="angular.element(this).scope().fileNameChanged(this)">
+                </div>
+            </div>
+        </div>-->
+
+            <div style="clear: both; padding-top: 10px; color:red;" ng-show="DocumentPathError">
+                <span ng-bind="DocumentPathError"></span>
+            </div>
+
+            <div style="clear: both; padding-top: 10px; color:red;" ng-show="ClientsMessage">
+                <span ng-bind="ClientsMessage"></span>
+            </div>
+
+            <div style="clear: both; padding-top: 10px;" ng-show="showDescription">
+                <div style="float: left; width: 140px;">
+                    Document Description
+                </div>
+                <div style="float: left;">
+                    <div style="float:left;">
+                        <input name="Description" type="text" maxlength="30" ng-model="DocumentDescription" required style="width: 300px;">
+                    </div>
+                    <div style="float: left; margin-left:10px; color:red" ng-show="DocumentDescriptionError">Please enter description</div>
+                </div>
+            </div>
+
+
+
+            <div style="clear: both; padding-top: 10px;">
+                <button id="btnLoadDocuments" class="btn btn-default" ng-click="LoadDocuments()">
+                    Load Documents
+                </button>
+            </div>
+
+            <div style="clear: both; padding-top: 10px;">
+                <div style="padding-top:10px;" ng-show="showBatchTypes">
+                    <div style="float: left; width: 160px;">
+                        Batch Type
+                    </div>
+                    <div style="float: left;">
+                        <div style="float: left;">
+                            <select ng-model="quickSelectBatchType" ng-class="form-control">
+                                <option ng-repeat="x in AllBatchTypes" value="{{x.Value}}">{{x.Text}}</option>
+                            </select>
+                        </div>
+                        <!--<div style="float: left; margin-left:10px; color:red" ng-show="BatchTypeError">Please select batch type</div>-->
+                    </div>
+                </div>
+
+                <div ng-show="showDocumentTypes">
+                    <div style="float: left; width: 160px; margin-left:20px;">
+                        Form Type
+                    </div>
+                    <div style="float: left;">
+                        <div style="float:left">
+                            <!--<select ng-model="selectedDocumentType">
+                            <option ng-repeat="x in DocumentTypes" value="{{x.Value}}">{{x.Text}}</option>
+                        </select>-->
+                            <select ng-class="form-control" style="width:200px;" ng-model="selectedDocumentType" ng-change="QuickSelectDocumentType()" ng-options="document.DocType for document in AllDocumentTypes | filter : {BatchType: quickSelectBatchType}: true"></select>
+                        </div>
+                        <!--<div style="float: left; margin-left:10px; color:red" ng-show="DocumentTypeError">Please select form type</div>-->
+                    </div>
+                </div>
+            </div>
+
+            <div style="clear: both; padding-top: 10px; color:red" ng-show="IncompleteSelection">
+                Please select batch and form types for all documents
+            </div>
+
+            <div style="clear: both; padding-top: 10px;">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>File Number</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>File Name</th>
+                            <th>Litigation</th>
+                            <th ng-if="DocLinkMode == 'Advanced'">Batch Type</th>
+                            <th ng-if="DocLinkMode == 'Advanced'">Form Type</th>
+                            <th>Description Override</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="x in Clients">
+                            <td>{{x.FileNumber}}</td>
+                            <td>{{x.FirstName}}</td>
+                            <td>{{x.LastName}}</td>
+                            <td>{{x.FileName}}</td>
+                            <td>{{x.Litigation}}</td>
+                            <td ng-if="DocLinkMode == 'Advanced'">
+                                <select ng-class="form-control" ng-model="x.BatchType" style="width:150px;">
+                                    <option ng-repeat="x1 in AllBatchTypes" value="{{x1.Value}}">{{x1.Text}}</option>
+                                </select>
+                            </td>
+                            <td ng-if="DocLinkMode == 'Advanced'">
+                                <select ng-class="form-control" style="width:200px;" ng-model="x.DocumentType" ng-options="document.DocType for document in AllDocumentTypes | filter : {BatchType: x.BatchType}: true"></select>
+                            </td>
+                            <td><input ng-model="x.DocumentDescription" required style="width: 200px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="clear: both; padding-top: 10px;">
+                <button id="btnAddCategory" class="btn btn-default" ng-click="LinkDocuments()" ng-disabled="LinkDocumentsDisabled" ng-show="AllowLinkDocuments">
+                    Link Documents
+                </button>
+            </div>
+
+        </div>
+
+    <div style="margin-left: 30px; clear: both; padding-top: 20px;" ng-show="ViewMode">
+
+        <!--<div style="clear: both;">
+            <div style="float: left; width: 120px;">
+                Batch Type
+            </div>
+            <div>
+                <span ng-bind="quickSelectBatchType"></span>
+            </div>
+        </div>
+
+        <div style="clear: both;">
+            <div style="float: left; width: 120px;">
+                Form Type
+            </div>
+            <div>
+                <span ng-bind="selectedDocumentType"></span>
+            </div>
+        </div>-->
+
+        <div style="clear: both;">
+            <div style="float: left; width: 120px;">
+                Description
+            </div>
+            <div>
+                <span ng-bind="DocumentDescription"></span>
+            </div>
+        </div>
+
+        <div style="clear: both;">
+            <div style="float: left; width: 120px;">
+                Document Path
+            </div>
+            <div>
+                <span ng-bind="DocumentMainPath"></span><span ng-bind="DocumentFolder"></span>
+            </div>
+        </div>
+
+
+
+        <div style="clear: both; padding-top: 10px;">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>File Number</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>File Name</th>
+                        <th>Litigation</th>
+                        <th>Batch Type</th>
+                        <th>Form Type</th>
+                        <th>Description</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="x in Clients">
+                        <td>{{x.FileNumber}}</td>
+                        <td>{{x.FirstName}}</td>
+                        <td>{{x.LastName}}</td>
+                        <td>{{x.FileName}}</td>
+                        <td>{{x.Litigation}}</td>
+                        <td>{{x.DocumentType.BatchType}}</td>
+                        <td>{{x.DocumentType.DocType}}</td>
+                        <td>{{x.DocumentDescription}}</td>
+                        <td>
+                            <label style="color:green" ng-show="x.Uploaded">Success</label>
+                            <label style="color:red" ng-show="!x.Uploaded">Failed</label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="modalDialogId">
+    <div class="ngdialog-message">
+        <h3>ngDialog modal example</h3>
+        <p>Are you sure you want to link the documents?.</p>
+    </div>
+    <div class="ngdialog-buttons">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm('confirmed')">Confirm</button>
+        <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('cancel')">Cancel</button>
+    </div>
+</script>

@@ -1,0 +1,76 @@
+﻿<div ng-controller="BulkUploadController">
+    <div style="margin-left: 30px; clear: both; padding-top: 20px;" ng-show="EditMode">
+        
+        <div>
+            <input type="file" ng-file-select="onFileSelect($files)"/>
+        </div>
+        
+        <div style="margin-top: 20px;" ng-show="ShowTemplateMessage">
+            Click <a ng-href="{{TemplateFile}}">here</a> to Download Template
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button ng-click="UploadFile()"><span ng-bind="UploadButtonCaption"></span></button>
+            <button ng-click="UploadData()" ng-disabled="BulkUploadDisabled" ng-show="AllowUpload" style="background-color: green; color: white">Confirm Upload</button>
+        </div>
+
+        <div style="clear:both;">
+            <div style="margin-top: 20px; float:left;" ng-show="UploadId">Upload Reference No - </div>
+            <div style="margin-top: 20px; float:left;" ng-bind="UploadId"></div>
+        </div>
+
+        <div style="margin-top: 30px; color: red; clear:both" ng-bind="UploadError"></div>
+
+        <div style="margin-top: 20px;" ng-show="ShowErrors">
+            <button ng-click="ShowUploadErrors()" ng-show="UploadId">Show Errors</button>
+        </div>
+
+
+        <div style="clear: both; padding-top: 10px;" ng-show="ReturnInfo.length > 0">
+            <table class="table table-hover">
+                <!--<thead>
+                <tr>
+                    <th>WL Number</th>
+                    <th>Client Name</th>
+                    <th>Errors</th>
+                </tr>
+                </thead>-->
+
+                <tbody>
+                <!--<tr ng-repeat="x in ReturnInfo">
+                    <td>{{x.WLNumber}}</td>
+                    <td>{{x.ClientName}}</td>
+                    <td>{{x.Error}}</td>
+                </tr>-->
+
+                <tr ng-repeat="rInfo in ReturnInfo | limitTo : 1">
+                    <th ng-repeat="(key, value) in rInfo">
+                        {{key}}
+                    </th>
+                </tr>
+
+                <tr ng-repeat="rInfo in ReturnInfo">
+                    <td ng-repeat="(key, value) in rInfo">
+                        <span ng-if="key=='Errors'" ng-bind-html="to_trusted(value)"></span>
+                        <span ng-if="key!='Errors'">{{value}}</span>
+                    </td>
+                </tr>
+
+                <!--<tr ng-repeat="(x, y) in ReturnInfo">
+                    <td>{{x}}</td>
+                    <td>{{y}}</td>
+                </tr>-->
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+
+    <div style="clear: both; padding-top: 20px;" ng-show="ViewMode">
+        <div style="margin-top: 20px; color: red" ng-bind="UploadError"></div>
+        <div style="clear: both; margin-left: 30px;" ng-bind="UploadMessage"></div>
+    </div>
+</div>
+

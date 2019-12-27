@@ -1,0 +1,51 @@
+﻿<script>
+  $( function() {
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "2000:2018",
+      showOn: "both",
+      buttonImage: "images/calendar.gif",
+      buttonImageOnly: true
+    });
+  } );
+</script>
+
+<div ng-controller="SCLetterController">
+    <div style="margin-left: 30px; clear: both; padding-top: 20px;" ng-show="EditMode">
+
+        <div style="clear: both; margin-left: 140px; color: red" ng-show="RejectLetterDateError">Please enter date</div>
+
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 130px;">
+                WL Numbers
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <textarea name="WLNumbers" id="WLNumbers" type="text" rows="5" cols="50" ng-model="WLNumbers" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px; margin-left: 140px;">
+            Each WL number should be on a separate line
+        </div>
+
+        <div style="clear: both; margin-left: 140px; color: red" ng-show="WLNumbersError">Please enter WL Numbers (each number should be on a separate line)</div>
+
+        <div style="clear: both; padding-top: 10px;">
+            <button id="btnUploadEntries" class="btn btn-default" ng-click="UploadEntries()" ng-disabled="UploadEntriesDisabled">
+                <span ng-bind="UploadButtonCaption"></span>
+            </button>
+        </div>
+
+        <div style="clear: both; color: red" ng-bind="UploadError"></div>
+
+    </div>
+
+    <div style="margin-left: 30px; clear: both; padding-top: 20px;" ng-show="ViewMode">
+        <div ng-bind="UploadMessage"></div>
+    </div>
+</div>
+

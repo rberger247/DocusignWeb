@@ -1,0 +1,256 @@
+﻿<script>
+  $( function() {
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1970:2017",
+      showOn: "both",
+      buttonImage: "images/calendar.gif",
+      buttonImageOnly: true
+    });
+  } );
+</script>
+
+<div ng-controller="SOLController">
+
+    <div style="clear:both;">
+        <div style="float:left">
+            <h3>SOL Management (<span ng-bind="ClientInfo.WLNumber"></span> - <span ng-bind="ClientInfo.ClientName"></span>- <span ng-bind="ClientInfo.LitAbbr"></span>)</h3>
+        </div>
+    </div>
+
+
+    <div style="clear: both; padding-top: 10px;" ng-show="ViewMode">
+        <div style="clear: both;">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th ng-show="ShowResidencyState">Current Residency State</th>
+                        <th>{{SOLStateCaption}}</th>
+                        <th ng-show="ShowResidencyState">Residency State</th>
+                        <th ng-show="ShowSubLitigation">Sub Litigation</th>
+                        <th ng-show="ShowDevice">Device</th>
+                        <th ng-show="ShowImplantNo">Implant No</th>
+                        <th>{{Injury1Caption}}</th>
+                        <th>{{Injury2Caption}}</th>
+                        <th>{{Injury3Caption}}</th>
+                        <th>{{Injury4Caption}}</th>
+                        <th>{{Injury5Caption}}</th>
+                        <th>Knowledge Date</th>
+                        <th>Date of Death</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="x in SOLEntries">
+                        <td ng-show="ShowResidencyState">{{x.CurrentResidencyState}}</td>
+                        <td>{{x.State}}</td>
+                        <td ng-show="ShowResidencyState">{{x.ResidencyState}}</td>
+                        <td ng-show="ShowSubLitigation">{{x.SubLitigationName}}</td>
+                        <td ng-show="ShowDevice">{{x.Device}}</td>
+                        <td ng-show="ShowImplantNo">{{x.ImplantNo}}</td>
+                        <td>{{x.InjuryDate1}}</td>
+                        <td>{{x.InjuryDate2}}</td>
+                        <td>{{x.InjuryDate3}}</td>
+                        <td>{{x.InjuryDate4}}</td>
+                        <td>{{x.InjuryDate5}}</td>
+                        <td>{{x.KnowledgeDate}}</td>
+                        <td>{{x.DateOfDeath}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-xs" ng-click="EditSOL($index)">Edit SOL</button>
+                            <button class="btn btn-primary btn-xs" ng-click="DeleteSOL(x.StateNo, x.SubLitigationId, x.DeviceId, x.CurrentResidencyStateNo, x.ResidencyStateNo, x.ImplantNo)">Delete SOL</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="clear: both;">
+            <button class="btn btn-primary" ng-click="AddSOL()">Add SOL</button>
+        </div>
+    </div>
+
+    <div style="clear: both; padding-top: 10px;" ng-show="EditMode">
+
+        <div style="clear: both; padding-top: 10px;" ng-show="ShowResidencyState">
+            <div style="float: left; width: 140px;">
+                Current Residency State
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <select ng-model="CurrentSOL.CurrentResidencyStateNo" ng-class="form-control" ng-show="EditKeyInfo">
+                        <option ng-repeat="x in SOLStates" value="{{x.Value}}">{{x.Text}}</option>
+                    </select>
+                    <span ng-bind="CurrentSOL.CurrentResidencyState" ng-show="!EditKeyInfo"></span>
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                {{SOLStateCaption}}
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <select ng-model="CurrentSOL.StateNo" ng-class="form-control" ng-show="EditKeyInfo">
+                        <option ng-repeat="x in SOLStates" value="{{x.Value}}">{{x.Text}}</option>
+                    </select>
+                    <span ng-bind="CurrentSOL.State" ng-show="!EditKeyInfo"></span>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div style="clear: both; padding-top: 10px;" ng-show="ShowResidencyState">
+            <div style="float: left; width: 140px;">
+                Residency State
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <select ng-model="CurrentSOL.ResidencyStateNo" ng-class="form-control" ng-show="EditKeyInfo">
+                        <option ng-repeat="x in SOLStates" value="{{x.Value}}">{{x.Text}}</option>
+                    </select>
+                    <span ng-bind="CurrentSOL.ResidencyState" ng-show="!EditKeyInfo"></span>
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;" ng-show="ShowSubLitigation">
+            <div style="float: left; width: 140px;">
+                Sub Litigation
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <select ng-model="CurrentSOL.SubLitigationId" ng-class="form-control" ng-show="EditKeyInfo">
+                        <option ng-repeat="x in SubLitigations" value="{{x.Value}}">{{x.Text}}</option>
+                    </select>
+                    <span ng-bind="CurrentSOL.SubLitigationName" ng-show="!EditKeyInfo"></span>
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;" ng-show="ShowDevice">
+            <div style="float: left; width: 140px;">
+                Device
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <select ng-model="CurrentSOL.DeviceId" ng-class="form-control" ng-show="EditKeyInfo">
+                        <option ng-repeat="x in Devices" value="{{x.Value}}">{{x.Text}}</option>
+                    </select>
+                    <span ng-bind="CurrentSOL.Device" ng-show="!EditKeyInfo"></span>
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;" ng-show="ShowImplantNo">
+            <div style="float: left; width: 140px;">
+                Implant No
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <select ng-model="CurrentSOL.ImplantNo" ng-class="form-control" ng-show="EditKeyInfo">
+                        <option ng-repeat="x in ImplantNos" value="{{x.Value}}">{{x.Text}}</option>
+                    </select>
+                    <span ng-bind="CurrentSOL.ImplantNo" ng-show="!EditKeyInfo"></span>
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                {{Injury1Caption}}
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input name="InjuryDate1" type="text" maxlength="10" class="datepicker" ng-model="CurrentSOL.InjuryDate1" style="width: 200px;">
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                {{Injury2Caption}}
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input name="InjuryDate2" type="text" maxlength="10" class="datepicker" ng-model="CurrentSOL.InjuryDate2" style="width: 200px;">
+                </div>
+            </div>
+        </div>
+
+
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                {{Injury3Caption}}
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input name="InjuryDate3" type="text" maxlength="10" class="datepicker" ng-model="CurrentSOL.InjuryDate3" style="width: 200px;">
+                </div>
+            </div>
+        </div>
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                {{Injury4Caption}}
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input name="InjuryDate4" type="text" maxlength="10" class="datepicker" ng-model="CurrentSOL.InjuryDate4" style="width: 200px;">
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;" ng-show="ShowInjury5">
+            <div style="float: left; width: 140px;">
+                {{Injury5Caption}}
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input name="InjuryDate5" type="text" maxlength="10" class="datepicker" ng-model="CurrentSOL.InjuryDate5" style="width: 200px;">
+                </div>
+            </div>
+        </div>
+
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                Knowledge Date
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input name="KnowledgeDate" type="text" maxlength="10" class="datepicker" ng-model="CurrentSOL.KnowledgeDate" style="width: 200px;">
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;" ng-show ="ClientInfo.Deceased">
+            <div style="float: left; width: 140px;">
+                Wrongful Death Applies
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input type="checkbox" ng-model="CurrentSOL.WrongfulDeathApplies" >
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                <button class="btn btn-primary" ng-click="SaveSOL()">Save SOL</button>
+            </div>
+            <div style="float: left; width: 140px;">
+                <button class="btn btn-primary" ng-click="CancelSave()">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+
+        <div style="clear: both; padding-top: 10px; color:red;" ng-show="SOLError">
+            <span ng-bind="SOLError"></span>
+        </div>
+
+    </div>
+

@@ -1,0 +1,85 @@
+﻿<div ng-controller="CorrespondenceEntryController">
+    <div style="margin-left: 30px; clear: both; padding-top: 20px;" ng-show="EditMode">
+
+        <!--<div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                Mode
+            </div>
+            <div style="float: left;">
+                <input type="radio" ng-model="Mode" value="Basic" ng-change="ChangeMode()">Basic
+                <input type="radio" ng-model="Mode" value="Advanced" ng-change="ChangeMode()">Advanced
+            </div>
+        </div>-->
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                Correspondence Date
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <input name="ActivityDate" type="text" maxlength="30" ng-model="ActivityDate" required style="width: 200px;">
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                Correspondence Type
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <select ng-model="ActivityType" ng-class="form-control">
+                        <option ng-repeat="x in ActivityTypes" value="{{x.Value}}">{{x.Text}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; margin-left: 140px; color: red" ng-show="ActivityTypeError">Please select Correspondence Type</div>
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                Comment
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <textarea name="ActivityDescription" type="text" rows="5" cols="50" ng-model="ActivityDescription" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; margin-left: 140px; color: red" ng-show="ActivityDescriptionError">Please enter comment</div>
+
+
+        <div style="clear: both; padding-top: 10px;">
+            <div style="float: left; width: 140px;">
+                WL Numbers
+            </div>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <textarea name="WLNumbers" id="WLNumbers" type="text" rows="5" cols="50" ng-model="WLNumbers" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div style="clear: both; padding-top: 10px; margin-left: 140px;">
+            Each WL number should be on a separate line
+        </div>
+
+            <div style="clear: both; margin-left: 140px; color: red" ng-show="WLNumbersError">Please enter WL Numbers (each number should be on a separate line)</div>
+
+            <div style="clear: both; padding-top: 10px;">
+                <button id="btnAddCategory" class="btn btn-default" ng-click="UploadCorrespondenceEntries()" ng-disabled="LinkDocumentsDisabled">
+                    Upload Entries
+                </button>
+            </div>
+
+            <div style="clear: both; margin-left: 140px; color: red" ng-bind="ActivityUploadError"></div>
+
+        </div>
+
+    <div style="margin-left: 30px; clear: both; padding-top: 20px;" ng-show="ViewMode">
+        <div ng-bind="ActivityUploadMessage"></div>
+    </div>
+</div>
+
